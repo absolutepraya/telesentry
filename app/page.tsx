@@ -20,7 +20,7 @@ export default function Home() {
 	return (
 		<div className='min-h-screen flex text-white'>
 			{/* Sidebar */}
-			<div className='w-[10rem] component-bg h-screen flex flex-col fixed left-0 top-0 z-10'>
+			<div className='w-[15rem] component-bg h-screen flex flex-col fixed left-0 top-0 z-10'>
 				<div className='p-4 flex items-center gap-2 font-bold text-xl border-b border-gray-700/50'>
 					<div className='bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center'>
 						<Radio size={16} />
@@ -29,31 +29,31 @@ export default function Home() {
 				</div>
 
 				<nav className='flex-1 py-4'>
-					<div className='px-3 py-2 flex items-center gap-2 bg-primary/20 border-l-4 border-primary'>
+					<div className='px-3 py-2 flex items-center gap-2 bg-primary/20 border-l-4 border-primary cursor-pointer'>
 						<HomeIcon size={18} />
 						<span>Dashboard</span>
 					</div>
-					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400 cursor-not-allowed'>
 						<ChartNoAxesCombined size={18} />
 						<span>Risk Analysis</span>
 					</div>
-					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400 cursor-not-allowed'>
 						<Logs size={18} />
 						<span>SS7 Logs</span>
 					</div>
-					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400 cursor-not-allowed'>
 						<BellRing size={18} />
 						<span>Alerts & Notifications</span>
 					</div>
-					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400 cursor-not-allowed'>
 						<ScrollText size={18} />
 						<span>Reports</span>
 					</div>
-					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400 cursor-not-allowed'>
 						<Atom size={18} />
 						<span>Integrations</span>
 					</div>
-					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400 cursor-not-allowed'>
 						<OctagonAlert size={18} />
 						<span>Help & Documentation</span>
 					</div>
@@ -61,7 +61,7 @@ export default function Home() {
 			</div>
 
 			{/* Main Content */}
-			<div className='flex-1 ml-[10rem]'>
+			<div className='flex-1 ml-[15rem]'>
 				{/* Top Navigation */}
 				<div className='flex justify-between items-center p-4'>
 					<div className='flex items-center gap-1'>

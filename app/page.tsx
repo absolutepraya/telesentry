@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import {
 	Home as HomeIcon,
 	TrendingUp,
@@ -22,10 +23,11 @@ export default function Home() {
 			{/* Sidebar */}
 			<div className='w-[15rem] component-bg h-screen flex flex-col fixed left-0 top-0 z-10'>
 				<div className='p-4 flex items-center gap-2 font-bold text-xl border-b border-gray-700/50'>
-					<div className='bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center'>
-						<Radio size={16} />
-					</div>
-					<span>Telesentry</span>
+					<img
+						src='/logo.svg'
+						alt='logo'
+						className='w-full'
+					/>
 				</div>
 
 				<nav className='flex-1 py-4'>

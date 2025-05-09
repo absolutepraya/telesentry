@@ -15,10 +15,10 @@ import {
 
 export default function Home() {
 	return (
-		<div className='min-h-screen flex bg-[#0D1B38] text-white'>
+		<div className='min-h-screen flex text-white'>
 			{/* Sidebar */}
-			<div className='w-[10rem] bg-[#061131] h-screen flex flex-col fixed left-0 top-0'>
-				<div className='p-4 flex items-center gap-2 font-bold text-xl border-b border-blue-900/50'>
+			<div className='w-[10rem] component-bg h-screen flex flex-col fixed left-0 top-0 z-10'>
+				<div className='p-4 flex items-center gap-2 font-bold text-xl border-b border-gray-700/50'>
 					<div className='bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center'>
 						<Radio size={16} />
 					</div>
@@ -60,14 +60,14 @@ export default function Home() {
 			{/* Main Content */}
 			<div className='flex-1 ml-[10rem]'>
 				{/* Top Navigation */}
-				<div className='flex justify-between items-center p-4 bg-[#061131]/50'>
+				<div className='flex justify-between items-center p-4 component-bg'>
 					<div className='flex items-center gap-1'>
 						<span>Home</span>
 						<ChevronRight size={14} />
 						<span>Dashboard</span>
 					</div>
 					<div className='flex items-center gap-4'>
-						<div className='flex items-center bg-[#061131] rounded-full px-3 py-1'>
+						<div className='flex items-center component-bg rounded-full px-3 py-1'>
 							<Search
 								size={14}
 								className='text-gray-400'
@@ -99,7 +99,7 @@ export default function Home() {
 									</div>
 									<div className='text-2xl font-bold'>731,311</div>
 								</div>
-								<div className='bg-blue-500/20 p-2 rounded-lg'>
+								<div className='bg-primary/20 p-2 rounded-lg'>
 									<Radio
 										size={20}
 										className='text-primary'
@@ -137,7 +137,7 @@ export default function Home() {
 										+3,052 <span className='text-xs text-red-500'>+12%</span>
 									</div>
 								</div>
-								<div className='bg-blue-500/20 p-2 rounded-lg'>
+								<div className='bg-primary/20 p-2 rounded-lg'>
 									<TrendingUp
 										size={20}
 										className='text-primary'
@@ -152,7 +152,7 @@ export default function Home() {
 									<div className='text-sm text-gray-400'>New Alert</div>
 									<div className='text-2xl font-bold'>256</div>
 								</div>
-								<div className='bg-blue-500/20 p-2 rounded-lg'>
+								<div className='bg-primary/20 p-2 rounded-lg'>
 									<Bell
 										size={20}
 										className='text-primary'
@@ -165,7 +165,7 @@ export default function Home() {
 					{/* Map */}
 					<div className='component-bg rounded-lg p-4 mb-6'>
 						<h2 className='text-lg font-bold mb-2'>Map</h2>
-						<div className='bg-gray-800 w-full h-96 rounded-lg flex items-center justify-center'>
+						<div className='bg-gray-800/50 w-full h-96 rounded-lg flex items-center justify-center'>
 							{/* Map content placeholder */}
 							<span className='text-gray-500'>
 								Map will be implemented later
@@ -193,7 +193,7 @@ export default function Home() {
 									</tr>
 								</thead>
 								<tbody>
-									<tr className='border-t border-blue-900/30'>
+									<tr className='border-t border-gray-700/30'>
 										<td className='py-3 flex items-center gap-2'>
 											<span className='w-2 h-2 rounded-full bg-red-500'></span>
 											North Jakarta
@@ -202,7 +202,7 @@ export default function Home() {
 										<td>141</td>
 										<td>2025-05-09T21:30:00Z</td>
 									</tr>
-									<tr className='border-t border-blue-900/30'>
+									<tr className='border-t border-gray-700/30'>
 										<td className='py-3 flex items-center gap-2'>
 											<span className='w-2 h-2 rounded-full bg-red-500'></span>
 											East Jakarta
@@ -211,7 +211,7 @@ export default function Home() {
 										<td>135</td>
 										<td>2025-05-09T20:40:00Z</td>
 									</tr>
-									<tr className='border-t border-blue-900/30'>
+									<tr className='border-t border-gray-700/30'>
 										<td className='py-3 flex items-center gap-2'>
 											<span className='w-2 h-2 rounded-full bg-orange-500'></span>
 											Temanggung
@@ -220,7 +220,7 @@ export default function Home() {
 										<td>123</td>
 										<td>2025-05-09T17:30:00Z</td>
 									</tr>
-									<tr className='border-t border-blue-900/30'>
+									<tr className='border-t border-gray-700/30'>
 										<td className='py-3 flex items-center gap-2'>
 											<span className='w-2 h-2 rounded-full bg-orange-500'></span>
 											Surabaya
@@ -229,7 +229,7 @@ export default function Home() {
 										<td>110</td>
 										<td>2025-05-09T15:30:00Z</td>
 									</tr>
-									<tr className='border-t border-blue-900/30'>
+									<tr className='border-t border-gray-700/30'>
 										<td className='py-3 flex items-center gap-2'>
 											<span className='w-2 h-2 rounded-full bg-orange-500'></span>
 											Bekasi
@@ -238,7 +238,7 @@ export default function Home() {
 										<td>89</td>
 										<td>2025-05-09T08:30:00Z</td>
 									</tr>
-									<tr className='border-t border-blue-900/30'>
+									<tr className='border-t border-gray-700/30'>
 										<td className='py-3 flex items-center gap-2'>
 											<span className='w-2 h-2 rounded-full bg-yellow-500'></span>
 											Batam
@@ -253,7 +253,7 @@ export default function Home() {
 
 						<div className='component-bg rounded-lg p-4'>
 							<h2 className='text-lg font-bold mb-4'>Anomaly Trends</h2>
-							<div className='bg-blue-900/30 w-full h-[250px] rounded-lg flex items-center justify-center'>
+							<div className='bg-gray-800/50 w-full h-[250px] rounded-lg flex items-center justify-center'>
 								{/* Chart placeholder */}
 								<span className='text-gray-500'>
 									Chart will be implemented later

@@ -1,16 +1,19 @@
 import {
 	Home as HomeIcon,
 	TrendingUp,
-	FileText,
 	Bell,
 	Settings,
-	HelpCircle,
 	AlertTriangle,
-	Server,
 	Search,
 	LogIn,
 	ChevronRight,
 	Radio,
+	ChartNoAxesCombined,
+	Logs,
+	BellRing,
+	ScrollText,
+	Atom,
+	OctagonAlert,
 } from 'lucide-react';
 
 export default function Home() {
@@ -31,27 +34,27 @@ export default function Home() {
 						<span>Dashboard</span>
 					</div>
 					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
-						<TrendingUp size={18} />
+						<ChartNoAxesCombined size={18} />
 						<span>Risk Analysis</span>
 					</div>
 					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
-						<Server size={18} />
+						<Logs size={18} />
 						<span>SS7 Logs</span>
 					</div>
 					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
-						<Bell size={18} />
+						<BellRing size={18} />
 						<span>Alerts & Notifications</span>
 					</div>
 					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
-						<FileText size={18} />
+						<ScrollText size={18} />
 						<span>Reports</span>
 					</div>
 					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
-						<Settings size={18} />
+						<Atom size={18} />
 						<span>Integrations</span>
 					</div>
 					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
-						<HelpCircle size={18} />
+						<OctagonAlert size={18} />
 						<span>Help & Documentation</span>
 					</div>
 				</nav>
@@ -60,7 +63,7 @@ export default function Home() {
 			{/* Main Content */}
 			<div className='flex-1 ml-[10rem]'>
 				{/* Top Navigation */}
-				<div className='flex justify-between items-center p-4 component-bg'>
+				<div className='flex justify-between items-center p-4'>
 					<div className='flex items-center gap-1'>
 						<span>Home</span>
 						<ChevronRight size={14} />

@@ -1,103 +1,268 @@
-import Image from "next/image";
+import {
+	Home as HomeIcon,
+	TrendingUp,
+	FileText,
+	Bell,
+	Settings,
+	HelpCircle,
+	AlertTriangle,
+	Server,
+	Search,
+	LogIn,
+	ChevronRight,
+	Radio,
+} from 'lucide-react';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:te1xt-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+	return (
+		<div className='min-h-screen flex bg-[#0D1B38] text-white'>
+			{/* Sidebar */}
+			<div className='w-[10rem] bg-[#061131] h-screen flex flex-col fixed left-0 top-0'>
+				<div className='p-4 flex items-center gap-2 font-bold text-xl border-b border-blue-900/50'>
+					<div className='bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center'>
+						<Radio size={16} />
+					</div>
+					<span>Telesentry</span>
+				</div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+				<nav className='flex-1 py-4'>
+					<div className='px-3 py-2 flex items-center gap-2 bg-primary/20 border-l-4 border-primary'>
+						<HomeIcon size={18} />
+						<span>Dashboard</span>
+					</div>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+						<TrendingUp size={18} />
+						<span>Risk Analysis</span>
+					</div>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+						<Server size={18} />
+						<span>SS7 Logs</span>
+					</div>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+						<Bell size={18} />
+						<span>Alerts & Notifications</span>
+					</div>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+						<FileText size={18} />
+						<span>Reports</span>
+					</div>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+						<Settings size={18} />
+						<span>Integrations</span>
+					</div>
+					<div className='px-3 py-2 flex items-center gap-2 text-gray-400'>
+						<HelpCircle size={18} />
+						<span>Help & Documentation</span>
+					</div>
+				</nav>
+			</div>
+
+			{/* Main Content */}
+			<div className='flex-1 ml-[10rem]'>
+				{/* Top Navigation */}
+				<div className='flex justify-between items-center p-4 bg-[#061131]/50'>
+					<div className='flex items-center gap-1'>
+						<span>Home</span>
+						<ChevronRight size={14} />
+						<span>Dashboard</span>
+					</div>
+					<div className='flex items-center gap-4'>
+						<div className='flex items-center bg-[#061131] rounded-full px-3 py-1'>
+							<Search
+								size={14}
+								className='text-gray-400'
+							/>
+							<input
+								type='text'
+								placeholder='Type here...'
+								className='bg-transparent border-none outline-none text-sm w-36 ml-2'
+							/>
+						</div>
+						<button className='flex items-center gap-1 text-sm'>
+							<LogIn size={14} />
+							<span>Sign In</span>
+						</button>
+						<Settings size={18} />
+						<Bell size={18} />
+					</div>
+				</div>
+
+				{/* Dashboard Content */}
+				<div className='p-4'>
+					{/* Stat Boxes */}
+					<div className='grid grid-cols-4 gap-4 mb-6'>
+						<div className='component-bg rounded-lg p-4'>
+							<div className='flex justify-between items-start'>
+								<div>
+									<div className='text-sm text-gray-400'>
+										Total Monitoring Towers
+									</div>
+									<div className='text-2xl font-bold'>731,311</div>
+								</div>
+								<div className='bg-blue-500/20 p-2 rounded-lg'>
+									<Radio
+										size={20}
+										className='text-primary'
+									/>
+								</div>
+							</div>
+						</div>
+
+						<div className='component-bg rounded-lg p-4'>
+							<div className='flex justify-between items-start'>
+								<div>
+									<div className='text-sm text-gray-400'>
+										Detected Illegal Tower
+									</div>
+									<div className='text-2xl font-bold'>
+										19 <span className='text-xs text-red-500'>+2</span>
+									</div>
+								</div>
+								<div className='bg-red-500/20 p-2 rounded-lg'>
+									<AlertTriangle
+										size={20}
+										className='text-red-500'
+									/>
+								</div>
+							</div>
+						</div>
+
+						<div className='component-bg rounded-lg p-4'>
+							<div className='flex justify-between items-start'>
+								<div>
+									<div className='text-sm text-gray-400'>
+										Average of Anomaly Rate
+									</div>
+									<div className='text-2xl font-bold'>
+										+3,052 <span className='text-xs text-red-500'>+12%</span>
+									</div>
+								</div>
+								<div className='bg-blue-500/20 p-2 rounded-lg'>
+									<TrendingUp
+										size={20}
+										className='text-primary'
+									/>
+								</div>
+							</div>
+						</div>
+
+						<div className='component-bg rounded-lg p-4'>
+							<div className='flex justify-between items-start'>
+								<div>
+									<div className='text-sm text-gray-400'>New Alert</div>
+									<div className='text-2xl font-bold'>256</div>
+								</div>
+								<div className='bg-blue-500/20 p-2 rounded-lg'>
+									<Bell
+										size={20}
+										className='text-primary'
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					{/* Map */}
+					<div className='component-bg rounded-lg p-4 mb-6'>
+						<h2 className='text-lg font-bold mb-2'>Map</h2>
+						<div className='bg-gray-800 w-full h-96 rounded-lg flex items-center justify-center'>
+							{/* Map content placeholder */}
+							<span className='text-gray-500'>
+								Map will be implemented later
+							</span>
+						</div>
+					</div>
+
+					{/* Bottom Section: Risk Locations and Anomaly Trends */}
+					<div className='grid grid-cols-3 gap-4'>
+						<div className='component-bg rounded-lg p-4 col-span-2'>
+							<div className='flex justify-between items-center mb-4'>
+								<h2 className='text-lg font-bold'>High-Risk Locations List</h2>
+								<button className='text-gray-400'>
+									<Settings size={16} />
+								</button>
+							</div>
+
+							<table className='w-full text-sm'>
+								<thead>
+									<tr className='text-gray-400 text-left'>
+										<th className='pb-2'>LOCATION</th>
+										<th className='pb-2'>RISK SCORE</th>
+										<th className='pb-2'>NUMBER of ILLEGAL TOWERS</th>
+										<th className='pb-2'>LAST DETECTION TIME</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr className='border-t border-blue-900/30'>
+										<td className='py-3 flex items-center gap-2'>
+											<span className='w-2 h-2 rounded-full bg-red-500'></span>
+											North Jakarta
+										</td>
+										<td>141</td>
+										<td>141</td>
+										<td>2025-05-09T21:30:00Z</td>
+									</tr>
+									<tr className='border-t border-blue-900/30'>
+										<td className='py-3 flex items-center gap-2'>
+											<span className='w-2 h-2 rounded-full bg-red-500'></span>
+											East Jakarta
+										</td>
+										<td>141</td>
+										<td>135</td>
+										<td>2025-05-09T20:40:00Z</td>
+									</tr>
+									<tr className='border-t border-blue-900/30'>
+										<td className='py-3 flex items-center gap-2'>
+											<span className='w-2 h-2 rounded-full bg-orange-500'></span>
+											Temanggung
+										</td>
+										<td>141</td>
+										<td>123</td>
+										<td>2025-05-09T17:30:00Z</td>
+									</tr>
+									<tr className='border-t border-blue-900/30'>
+										<td className='py-3 flex items-center gap-2'>
+											<span className='w-2 h-2 rounded-full bg-orange-500'></span>
+											Surabaya
+										</td>
+										<td>141</td>
+										<td>110</td>
+										<td>2025-05-09T15:30:00Z</td>
+									</tr>
+									<tr className='border-t border-blue-900/30'>
+										<td className='py-3 flex items-center gap-2'>
+											<span className='w-2 h-2 rounded-full bg-orange-500'></span>
+											Bekasi
+										</td>
+										<td>141</td>
+										<td>89</td>
+										<td>2025-05-09T08:30:00Z</td>
+									</tr>
+									<tr className='border-t border-blue-900/30'>
+										<td className='py-3 flex items-center gap-2'>
+											<span className='w-2 h-2 rounded-full bg-yellow-500'></span>
+											Batam
+										</td>
+										<td>141</td>
+										<td>67</td>
+										<td>2025-05-09T06:30:00Z</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div className='component-bg rounded-lg p-4'>
+							<h2 className='text-lg font-bold mb-4'>Anomaly Trends</h2>
+							<div className='bg-blue-900/30 w-full h-[250px] rounded-lg flex items-center justify-center'>
+								{/* Chart placeholder */}
+								<span className='text-gray-500'>
+									Chart will be implemented later
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }

@@ -17,6 +17,7 @@ import {
 	Atom,
 	OctagonAlert,
 } from 'lucide-react';
+import Map from './components/Map';
 
 export default function Home() {
 	return (
@@ -175,14 +176,7 @@ export default function Home() {
 					<div className='component-bg rounded-2xl p-4 mb-6'>
 						<h2 className='text-lg font-bold mb-2'>Map</h2>
 						<div className='bg-gray-800/50 w-full h-96 rounded-2xl overflow-hidden'>
-							<iframe
-								title='Map BTS Tower'
-								width='100%'
-								height='100%'
-								frameBorder='0'
-								src={`https://www.google.com/maps/embed/v1/search?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=menara+bts&zoom=8&maptype=satellite`}
-								allowFullScreen
-							/>
+							<Map />
 						</div>
 					</div>
 

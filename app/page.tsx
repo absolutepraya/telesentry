@@ -174,11 +174,15 @@ export default function Home() {
 					{/* Map */}
 					<div className='component-bg rounded-2xl p-4 mb-6'>
 						<h2 className='text-lg font-bold mb-2'>Map</h2>
-						<div className='bg-gray-800/50 w-full h-96 rounded-2xl flex items-center justify-center'>
-							{/* Map content placeholder */}
-							<span className='text-gray-500'>
-								Map will be implemented later
-							</span>
+						<div className='bg-gray-800/50 w-full h-96 rounded-2xl overflow-hidden'>
+							<iframe
+								title='Map BTS Tower'
+								width='100%'
+								height='100%'
+								frameBorder='0'
+								src={`https://www.google.com/maps/embed/v1/search?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=menara+bts&zoom=8&maptype=satellite`}
+								allowFullScreen
+							/>
 						</div>
 					</div>
 

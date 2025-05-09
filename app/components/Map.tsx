@@ -139,7 +139,7 @@ export default function Map() {
 		<div className='relative w-full h-full'>
 			{/* Side panel that appears when a marker is clicked */}
 			{selectedMarker && (
-				<div className='absolute left-0 top-0 z-10 component-bg w-80 h-full overflow-auto p-4 rounded-l-2xl'>
+				<div className='absolute left-2 top-2 z-10 component-bg w-80 h-[90%] overflow-auto p-4 rounded-2xl'>
 					<div className='flex justify-between items-center mb-4'>
 						<h3 className='text-lg font-bold'>Tower Details</h3>
 						<button

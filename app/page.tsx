@@ -94,7 +94,7 @@ export default function Home() {
 					setScanResult({ isLegal });
 					setIsAnalyzing(false);
 					setScanCounter((prev) => prev + 1);
-				}, 2000);
+				}, 4000);
 			}
 		}
 	};

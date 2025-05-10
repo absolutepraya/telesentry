@@ -18,6 +18,7 @@ import {
 	OctagonAlert,
 } from 'lucide-react';
 import Map from './components/Map';
+import AnomalyChart from './components/AnomalyChart';
 
 export default function Home() {
 	return (
@@ -260,11 +261,11 @@ export default function Home() {
 
 						<div className='component-bg rounded-2xl p-4'>
 							<h2 className='text-lg font-bold mb-4'>Anomaly Trends</h2>
-							<div className='bg-gray-800/50 w-full h-[250px] rounded-2xl flex items-center justify-center'>
-								{/* Chart placeholder */}
-								<span className='text-gray-500'>
-									Chart will be implemented later
-								</span>
+							<div className='bg-gray-800/50 w-full h-[250px] rounded-2xl'>
+								<AnomalyChart />
+							</div>
+							<div className='mt-3 flex justify-between items-center text-xs'>
+								<span className='text-gray-400'>Last 3 days</span>
 							</div>
 						</div>
 					</div>

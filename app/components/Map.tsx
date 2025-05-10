@@ -43,7 +43,7 @@ const customCoordinates = [
 		lng: 106.77968962477121,
 		anomalyData: {
 			riskScore: 89,
-			location: 'Gambir, Jakarta Pusat',
+			location: 'Kebayoran Lama, Jakarta Selatan',
 			time: '2025-05-09T21:30:00Z',
 			imsi: '****2435',
 			mapMsgType: 'SendRoutingInfoForSM',
@@ -61,7 +61,7 @@ const customCoordinates = [
 		lng: 106.79097616171859,
 		anomalyData: {
 			riskScore: 76,
-			location: 'Menteng, Jakarta Pusat',
+			location: 'Pluit, Jakarta Utara',
 			time: '2025-05-09T19:45:00Z',
 			imsi: '****7842',
 			mapMsgType: 'UpdateLocation',

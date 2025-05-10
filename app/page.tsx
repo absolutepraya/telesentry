@@ -141,7 +141,7 @@ export default function Home() {
 							<div className='flex justify-between items-start'>
 								<div>
 									<div className='text-sm text-gray-400'>
-										Average of Anomaly Rate
+										Anomaly Rate
 									</div>
 									<div className='text-2xl font-bold items-end flex'>
 										+3,052{' '}

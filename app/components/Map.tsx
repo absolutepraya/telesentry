@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, FormEvent } from 'react';
 import { GoogleMap, useLoadScript, OverlayView } from '@react-google-maps/api';
 import { RadioTower } from 'lucide-react';
 
@@ -36,6 +36,18 @@ const defaultCenter = {
 	lng: 106.8456,
 };
 
+// Custom coordinates to search
+const customCoordinates = [
+	{
+		lat: -6.232294132667354,
+		lng: 106.77968962477121,
+	},
+	{
+		lat: -6.1194905670318525,
+		lng: 106.79097616171859,
+	}
+];
+
 // Map options
 const mapOptions = {
 	styles: mapStyles,
@@ -51,6 +63,9 @@ interface TowerLocation {
 	lat: number;
 	lng: number;
 	id?: string;
+	type?: 'tower' | 'custom';
+	name?: string;
+	address?: string;
 }
 
 export default function Map() {
@@ -59,6 +74,7 @@ export default function Map() {
 	const [selectedMarker, setSelectedMarker] = useState<TowerLocation | null>(
 		null
 	);
+	const [searchInput, setSearchInput] = useState<string>('');
 
 	const { isLoaded, loadError } = useLoadScript({
 		googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
@@ -84,11 +100,59 @@ export default function Map() {
 		setSelectedMarker(null);
 	};
 
+	// Handle coordinate search
+	const handleCoordinateSearch = (e: FormEvent) => {
+		e.preventDefault();
+
+		if (!map || !searchInput) return;
+
+		// Try to parse coordinates
+		const coordsRegex = /(-?\d+\.?\d*),\s*(-?\d+\.?\d*)/;
+		const match = searchInput.match(coordsRegex);
+
+		if (match) {
+			const lat = parseFloat(match[1]);
+			const lng = parseFloat(match[2]);
+
+			if (!isNaN(lat) && !isNaN(lng)) {
+				// Create a new custom marker
+				const customMarker: TowerLocation = {
+					lat,
+					lng,
+					id: `custom-${Date.now()}`,
+					type: 'custom',
+					name: 'Custom Location',
+					address: `${lat}, ${lng}`,
+				};
+
+				// Add to markers
+				setMarkers((prev) => [...prev, customMarker]);
+
+				// Pan to the location
+				map.panTo({ lat, lng });
+				map.setZoom(15);
+
+				// Clear input
+				setSearchInput('');
+			}
+		}
+	};
+
 	// Search for "menara bts" and place markers when map is ready
 	useEffect(() => {
 		if (map && isLoaded) {
 			const placesService = new google.maps.places.PlacesService(map);
 
+			// Add custom coordinate markers
+			const customMarkers: TowerLocation[] = customCoordinates.map((coords, index) => ({
+				...coords,
+				id: `custom-location-${index}`,
+				type: 'custom',
+				name: 'Custom Location',
+				address: `${coords.lat}, ${coords.lng}`,
+			}));
+
+			// Search for menara bts
 			placesService.textSearch(
 				{
 					query: 'menara bts',
@@ -101,21 +165,36 @@ export default function Map() {
 							lat: place.geometry?.location?.lat() || 0,
 							lng: place.geometry?.location?.lng() || 0,
 							id: `tower-${index}`,
+							type: 'tower' as const,
 							name: place.name,
 							address: place.formatted_address,
 						}));
-						setMarkers(locations);
+
+						// Combine tower locations with custom markers
+						setMarkers([...locations, ...customMarkers]);
 
 						// If we have results, fit the map to show all markers
 						if (locations.length > 0) {
 							const bounds = new google.maps.LatLngBounds();
+							// Add all tower locations to bounds
 							locations.forEach((location) => {
 								bounds.extend(
 									new google.maps.LatLng(location.lat, location.lng)
 								);
 							});
+							// Also add custom markers to bounds
+							customMarkers.forEach((marker) => {
+								bounds.extend(
+									new google.maps.LatLng(marker.lat, marker.lng)
+								);
+							});
 							map.fitBounds(bounds);
 						}
+					} else {
+						// If tower search fails, still show custom markers
+						setMarkers(customMarkers);
+						map.panTo(customCoordinates[0]);
+						map.setZoom(15);
 					}
 				}
 			);
@@ -137,11 +216,37 @@ export default function Map() {
 
 	return (
 		<div className='relative w-full h-full'>
+			{/* Search input */}
+			<div className='absolute top-2 right-2 z-10 p-2 component-bg rounded-lg'>
+				<form
+					onSubmit={handleCoordinateSearch}
+					className='flex gap-2'
+				>
+					<input
+						type='text'
+						value={searchInput}
+						onChange={(e) => setSearchInput(e.target.value)}
+						placeholder='Enter coordinates (lat, lng)'
+						className='w-64 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg'
+					/>
+					<button
+						type='submit'
+						className='px-3 py-2 bg-blue-600 rounded-lg hover:bg-blue-700'
+					>
+						Search
+					</button>
+				</form>
+			</div>
+
 			{/* Side panel that appears when a marker is clicked */}
 			{selectedMarker && (
 				<div className='absolute left-2 top-2 z-10 component-bg w-80 h-[90%] overflow-auto p-4 rounded-2xl'>
 					<div className='flex justify-between items-center mb-4'>
-						<h3 className='text-lg font-bold'>Tower Details</h3>
+						<h3 className='text-lg font-bold'>
+							{selectedMarker.type === 'custom'
+								? 'Custom Location'
+								: 'Tower Details'}
+						</h3>
 						<button
 							onClick={closeSidePanel}
 							className='text-gray-400 hover:text-white'
@@ -160,23 +265,27 @@ export default function Map() {
 							<p>Lat: {selectedMarker.lat.toFixed(6)}</p>
 							<p>Lng: {selectedMarker.lng.toFixed(6)}</p>
 						</div>
-						<div>
-							<p className='text-gray-400 text-sm'>Status</p>
-							<div className='flex items-center gap-2 mt-1'>
-								<span className='w-2 h-2 rounded-full bg-green-400'></span>
-								<span>Active</span>
-							</div>
-						</div>
-						<div>
-							<p className='text-gray-400 text-sm'>Signal Strength</p>
-							<div className='w-full bg-gray-700 rounded-full h-2 mt-1'>
-								<div
-									className='bg-green-400 h-2 rounded-full'
-									style={{ width: '85%' }}
-								></div>
-							</div>
-							<p className='text-right text-xs mt-1'>85%</p>
-						</div>
+						{selectedMarker.type === 'tower' && (
+							<>
+								<div>
+									<p className='text-gray-400 text-sm'>Status</p>
+									<div className='flex items-center gap-2 mt-1'>
+										<span className='w-2 h-2 rounded-full bg-green-400'></span>
+										<span>Active</span>
+									</div>
+								</div>
+								<div>
+									<p className='text-gray-400 text-sm'>Signal Strength</p>
+									<div className='w-full bg-gray-700 rounded-full h-2 mt-1'>
+										<div
+											className='bg-green-400 h-2 rounded-full'
+											style={{ width: '85%' }}
+										></div>
+									</div>
+									<p className='text-right text-xs mt-1'>85%</p>
+								</div>
+							</>
+						)}
 					</div>
 				</div>
 			)}
@@ -199,12 +308,20 @@ export default function Map() {
 							className='relative cursor-pointer'
 							onClick={() => handleMarkerClick(marker)}
 						>
-							<div className='w-8 h-8 bg-blue-900 rounded-full flex items-center justify-center shadow-lg'>
-								<RadioTower
-									className='text-green-400'
-									size={20}
-								/>
-							</div>
+							{marker.type === 'custom' ? (
+								<div className='relative flex items-center justify-center'>
+									{/* Outer pulsating ring */}
+									<span className='absolute w-12 h-12 rounded-full bg-red-500 animate-ping'></span>
+									<span className='absolute w-4 h-4 rounded-full bg-red-700'></span>
+								</div>
+							) : (
+								<div className='w-8 h-8 bg-blue-900 rounded-full flex items-center justify-center shadow-lg'>
+									<RadioTower
+										className='text-green-400'
+										size={20}
+									/>
+								</div>
+							)}
 						</div>
 					</OverlayView>
 				))}

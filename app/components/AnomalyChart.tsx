@@ -89,7 +89,7 @@ const AnomalyChart = () => {
 					x: {
 						grid: {
 							color: 'rgba(150, 150, 150, 0.1)',
-							drawBorder: false,
+							// drawBorder: false,
 						},
 						ticks: {
 							color: 'rgba(200, 200, 200, 0.7)',

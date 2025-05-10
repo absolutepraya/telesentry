@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
 	title: 'Telesentry - UINNOVATORS',
 	description: 'Telesentry - UINNOVATORS',
+	icons: {
+		icon: '/logo-small.svg',
+	},
 };
 
 export default function RootLayout({

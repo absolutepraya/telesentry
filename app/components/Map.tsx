@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, FormEvent } from 'react';
 import { GoogleMap, useLoadScript, OverlayView } from '@react-google-maps/api';
-import { RadioTower } from 'lucide-react';
+import { RadioTower, AlertCircle } from 'lucide-react';
 
 // Map container style
 const mapContainerStyle = {
@@ -41,11 +41,39 @@ const customCoordinates = [
 	{
 		lat: -6.232294132667354,
 		lng: 106.77968962477121,
+		anomalyData: {
+			riskScore: 89,
+			location: 'Gambir, Jakarta Pusat',
+			time: '2025-05-09T21:30:00Z',
+			imsi: '****2435',
+			mapMsgType: 'SendRoutingInfoForSM',
+			anomalyScore: 0.92,
+			nearestTower: {
+				id: '5678',
+				illegal: true,
+				operator: 'Telkomcell',
+				distance: 120,
+			},
+		},
 	},
 	{
 		lat: -6.1194905670318525,
 		lng: 106.79097616171859,
-	}
+		anomalyData: {
+			riskScore: 76,
+			location: 'Menteng, Jakarta Pusat',
+			time: '2025-05-09T19:45:00Z',
+			imsi: '****7842',
+			mapMsgType: 'UpdateLocation',
+			anomalyScore: 0.84,
+			nearestTower: {
+				id: '3421',
+				illegal: false,
+				operator: 'XL Axiata',
+				distance: 85,
+			},
+		},
+	},
 ];
 
 // Map options
@@ -66,6 +94,20 @@ interface TowerLocation {
 	type?: 'tower' | 'custom';
 	name?: string;
 	address?: string;
+	anomalyData?: {
+		riskScore: number;
+		location: string;
+		time: string;
+		imsi: string;
+		mapMsgType: string;
+		anomalyScore: number;
+		nearestTower: {
+			id: string;
+			illegal: boolean;
+			operator: string;
+			distance: number;
+		};
+	};
 }
 
 export default function Map() {
@@ -144,13 +186,15 @@ export default function Map() {
 			const placesService = new google.maps.places.PlacesService(map);
 
 			// Add custom coordinate markers
-			const customMarkers: TowerLocation[] = customCoordinates.map((coords, index) => ({
-				...coords,
-				id: `custom-location-${index}`,
-				type: 'custom',
-				name: 'Custom Location',
-				address: `${coords.lat}, ${coords.lng}`,
-			}));
+			const customMarkers: TowerLocation[] = customCoordinates.map(
+				(coords, index) => ({
+					...coords,
+					id: `custom-location-${index}`,
+					type: 'custom',
+					name: 'Custom Location',
+					address: `${coords.lat}, ${coords.lng}`,
+				})
+			);
 
 			// Search for menara bts
 			placesService.textSearch(
@@ -184,9 +228,7 @@ export default function Map() {
 							});
 							// Also add custom markers to bounds
 							customMarkers.forEach((marker) => {
-								bounds.extend(
-									new google.maps.LatLng(marker.lat, marker.lng)
-								);
+								bounds.extend(new google.maps.LatLng(marker.lat, marker.lng));
 							});
 							map.fitBounds(bounds);
 						}
@@ -213,6 +255,48 @@ export default function Map() {
 				Loading maps...
 			</div>
 		);
+
+	// Render anomaly detection panel for custom locations
+	const renderAnomalyPanel = () => {
+		if (!selectedMarker || !selectedMarker.anomalyData) return null;
+
+		const { anomalyData } = selectedMarker;
+
+		return (
+			<div className='space-y-3 p-2'>
+				<div className='flex items-center gap-2 text-red-600 font-bold text-lg'>
+					<AlertCircle size={24} />
+					<span>SS7 Anomaly Detected</span>
+				</div>
+
+				<div className='space-y-2 text-sm'>
+					<p>Risk Score: {anomalyData.riskScore}/100</p>
+					<p>Location: {anomalyData.location}</p>
+					<p>Time: {anomalyData.time}</p>
+				</div>
+
+				<div className='space-y-2 text-sm mt-4'>
+					<p>IMSI (masked): {anomalyData.imsi}</p>
+					<p>MAP Msg Type: {anomalyData.mapMsgType}</p>
+					<p>Anomaly Score: {anomalyData.anomalyScore}</p>
+				</div>
+
+				<div className='mt-4'>
+					<p className='text-sm mb-1'>Nearest Tower:</p>
+					<ul className='list-disc pl-8 space-y-1 text-sm'>
+						<li>
+							ID: {anomalyData.nearestTower.id}{' '}
+							{anomalyData.nearestTower.illegal && (
+								<span className='text-red-500'>(Illegal)</span>
+							)}
+						</li>
+						<li>Operator: {anomalyData.nearestTower.operator}</li>
+						<li>Distance: {anomalyData.nearestTower.distance} m</li>
+					</ul>
+				</div>
+			</div>
+		);
+	};
 
 	return (
 		<div className='relative w-full h-full'>
@@ -243,9 +327,7 @@ export default function Map() {
 				<div className='absolute left-2 top-2 z-10 component-bg w-80 h-[90%] overflow-auto p-4 rounded-2xl'>
 					<div className='flex justify-between items-center mb-4'>
 						<h3 className='text-lg font-bold'>
-							{selectedMarker.type === 'custom'
-								? 'Custom Location'
-								: 'Tower Details'}
+							{selectedMarker.type === 'custom' ? '' : 'Tower Details'}
 						</h3>
 						<button
 							onClick={closeSidePanel}
@@ -255,38 +337,46 @@ export default function Map() {
 						</button>
 					</div>
 
-					<div className='space-y-4'>
-						<div>
-							<p className='text-gray-400 text-sm'>ID</p>
-							<p>{selectedMarker.id}</p>
+					{selectedMarker.type === 'custom' ? (
+						// Show anomaly detection panel for custom locations
+						<div
+							className={`rounded-xl p-2 ${
+								selectedMarker.anomalyData ? 'bg-red-200/20' : ''
+							}`}
+						>
+							{renderAnomalyPanel()}
 						</div>
-						<div>
-							<p className='text-gray-400 text-sm'>Coordinates</p>
-							<p>Lat: {selectedMarker.lat.toFixed(6)}</p>
-							<p>Lng: {selectedMarker.lng.toFixed(6)}</p>
+					) : (
+						// Show regular tower details for tower markers
+						<div className='space-y-4'>
+							<div>
+								<p className='text-gray-400 text-sm'>ID</p>
+								<p>{selectedMarker.id}</p>
+							</div>
+							<div>
+								<p className='text-gray-400 text-sm'>Coordinates</p>
+								<p>Lat: {selectedMarker.lat.toFixed(6)}</p>
+								<p>Lng: {selectedMarker.lng.toFixed(6)}</p>
+							</div>
+							<div>
+								<p className='text-gray-400 text-sm'>Status</p>
+								<div className='flex items-center gap-2 mt-1'>
+									<span className='w-2 h-2 rounded-full bg-green-400'></span>
+									<span>Active</span>
+								</div>
+							</div>
+							<div>
+								<p className='text-gray-400 text-sm'>Signal Strength</p>
+								<div className='w-full bg-gray-700 rounded-full h-2 mt-1'>
+									<div
+										className='bg-green-400 h-2 rounded-full'
+										style={{ width: '85%' }}
+									></div>
+								</div>
+								<p className='text-right text-xs mt-1'>85%</p>
+							</div>
 						</div>
-						{selectedMarker.type === 'tower' && (
-							<>
-								<div>
-									<p className='text-gray-400 text-sm'>Status</p>
-									<div className='flex items-center gap-2 mt-1'>
-										<span className='w-2 h-2 rounded-full bg-green-400'></span>
-										<span>Active</span>
-									</div>
-								</div>
-								<div>
-									<p className='text-gray-400 text-sm'>Signal Strength</p>
-									<div className='w-full bg-gray-700 rounded-full h-2 mt-1'>
-										<div
-											className='bg-green-400 h-2 rounded-full'
-											style={{ width: '85%' }}
-										></div>
-									</div>
-									<p className='text-right text-xs mt-1'>85%</p>
-								</div>
-							</>
-						)}
-					</div>
+					)}
 				</div>
 			)}
 

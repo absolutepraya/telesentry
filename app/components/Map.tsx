@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, FormEvent } from 'react';
 import { GoogleMap, useLoadScript, OverlayView } from '@react-google-maps/api';
-import { RadioTower, AlertCircle } from 'lucide-react';
+import { RadioTower, AlertCircle, MessageCircleWarning } from 'lucide-react';
 
 // Map container style
 const mapContainerStyle = {
@@ -142,6 +142,27 @@ export default function Map() {
 		setSelectedMarker(null);
 	};
 
+	// Handle WhatsApp reporting
+	const handleReport = (marker: TowerLocation) => {
+		const phone = '628118465006'; // Phone number without "+"
+		const lat = marker.lat.toFixed(6);
+		const lng = marker.lng.toFixed(6);
+		const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+
+		const message = `Laporan Illegal Base Transceiver Station:
+
+Latitude: ${lat}
+Longitude: ${lng}
+Maps URL: ${mapsUrl}
+
+Mohon segera diperiksa dan ditindaklanjuti. Terima kasih.`;
+
+		const encodedMessage = encodeURIComponent(message);
+		const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+
+		window.open(whatsappUrl, '_blank');
+	};
+
 	// Handle coordinate search
 	const handleCoordinateSearch = (e: FormEvent) => {
 		e.preventDefault();
@@ -268,6 +289,14 @@ export default function Map() {
 					<AlertCircle size={24} />
 					<span>SS7 Anomaly Detected</span>
 				</div>
+
+				<button
+					className='flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg mt-2 w-full justify-center'
+					onClick={() => handleReport(selectedMarker)}
+				>
+					<MessageCircleWarning size={18} />
+					<span>Report</span>
+				</button>
 
 				<div className='space-y-2 text-sm'>
 					<p>Risk Score: {anomalyData.riskScore}/100</p>

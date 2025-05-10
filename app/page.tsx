@@ -1,5 +1,8 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
+
+'use client';
+
 import {
 	Home as HomeIcon,
 	TrendingUp,
@@ -16,11 +19,86 @@ import {
 	ScrollText,
 	Atom,
 	OctagonAlert,
+	Camera,
+	CheckCircle,
+	XCircle,
+	Loader,
 } from 'lucide-react';
 import Map from './components/Map';
 import AnomalyChart from './components/AnomalyChart';
+import { useState, useRef, useEffect } from 'react';
 
 export default function Home() {
+	const [showScan, setShowScan] = useState(false);
+	const [capturedImage, setCapturedImage] = useState('');
+	const [isAnalyzing, setIsAnalyzing] = useState(false);
+	const [scanResult, setScanResult] = useState<null | { isLegal: boolean }>(
+		null
+	);
+	const [scanCounter, setScanCounter] = useState(0);
+	const videoRef = useRef<HTMLVideoElement>(null);
+	const streamRef = useRef<MediaStream | null>(null);
+
+	// Initialize webcam when showScan is true
+	useEffect(() => {
+		if (showScan && videoRef.current) {
+			startWebcam();
+		}
+
+		// Cleanup function to stop webcam when component unmounts or showScan becomes false
+		return () => {
+			if (streamRef.current) {
+				const tracks = streamRef.current.getTracks();
+				tracks.forEach((track) => track.stop());
+				streamRef.current = null;
+			}
+		};
+	}, [showScan]);
+
+	const startWebcam = async () => {
+		try {
+			const stream = await navigator.mediaDevices.getUserMedia({
+				video: true,
+				audio: false,
+			});
+
+			if (videoRef.current) {
+				videoRef.current.srcObject = stream;
+				streamRef.current = stream;
+			}
+		} catch (err) {
+			console.error('Error accessing webcam:', err);
+		}
+	};
+
+	const captureImage = () => {
+		if (videoRef.current) {
+			const canvas = document.createElement('canvas');
+			canvas.width = videoRef.current.videoWidth;
+			canvas.height = videoRef.current.videoHeight;
+
+			const ctx = canvas.getContext('2d');
+			if (ctx) {
+				ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
+				const imageDataUrl = canvas.toDataURL('image/png');
+				setCapturedImage(imageDataUrl);
+
+				// Reset result and start analyzing
+				setScanResult(null);
+				setIsAnalyzing(true);
+
+				// Simulate API analysis
+				setTimeout(() => {
+					const isLegal = scanCounter % 2 === 0;
+					setScanResult({ isLegal });
+					setIsAnalyzing(false);
+					setScanCounter((prev) => prev + 1);
+				}, 2000);
+			}
+		}
+	};
+
 	return (
 		<div className='min-h-screen flex text-white'>
 			{/* Sidebar */}
@@ -92,6 +170,12 @@ export default function Home() {
 							<LogIn size={14} />
 							<span>Sign In</span>
 						</button>
+						<div
+							className='cursor-pointer hover:text-primary transition-colors'
+							onClick={() => setShowScan(!showScan)}
+						>
+							<Camera size={18} />
+						</div>
 						<Settings size={18} />
 						<Bell size={18} />
 					</div>
@@ -140,9 +224,7 @@ export default function Home() {
 						<div className='component-bg rounded-2xl p-4'>
 							<div className='flex justify-between items-start'>
 								<div>
-									<div className='text-sm text-gray-400'>
-										Anomaly Rate
-									</div>
+									<div className='text-sm text-gray-400'>Anomaly Rate</div>
 									<div className='text-2xl font-bold items-end flex'>
 										+3,052{' '}
 										<span className='text-xs text-red-500 ml-1'>+12%</span>
@@ -173,11 +255,96 @@ export default function Home() {
 						</div>
 					</div>
 
-					{/* Map */}
+					{/* Map or Scan */}
 					<div className='component-bg rounded-2xl p-4 mb-6'>
-						<h2 className='text-lg font-bold mb-2'>Map</h2>
+						<h2 className='text-lg font-bold mb-2'>
+							{showScan ? 'Scan' : 'Map'}
+						</h2>
 						<div className='bg-gray-800/50 w-full h-96 rounded-2xl overflow-hidden'>
-							<Map />
+							{showScan ? (
+								<div className='flex w-full h-full'>
+									<div className='w-1/2 p-4 border-r border-gray-700/30 flex flex-col'>
+										<div className='bg-gray-700/30 w-full h-full rounded-xl flex items-center justify-center overflow-hidden relative'>
+											<video
+												ref={videoRef}
+												autoPlay
+												playsInline
+												className='w-full h-full object-cover'
+											/>
+											<button
+												className='absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-4 py-2 rounded-xl flex items-center gap-2'
+												onClick={captureImage}
+											>
+												<Camera size={16} />
+												Scan
+											</button>
+										</div>
+									</div>
+									<div className='w-1/2 p-4 flex flex-col'>
+										<div className='bg-gray-700/30 w-full h-1/2 rounded-xl mb-4 overflow-hidden flex items-center justify-center'>
+											{capturedImage ? (
+												<img
+													src={capturedImage}
+													alt='Captured image'
+													className='w-full h-full object-contain'
+												/>
+											) : (
+												<div className='text-gray-400 text-sm'>
+													No image captured
+												</div>
+											)}
+										</div>
+										<div className='bg-gray-700/30 w-full h-1/2 rounded-xl flex flex-col items-center justify-center p-4'>
+											{isAnalyzing ? (
+												<div className='flex flex-col items-center'>
+													<Loader
+														size={40}
+														className='animate-spin mb-2'
+													/>
+													<span className='text-gray-300'>Analyzing...</span>
+												</div>
+											) : scanResult ? (
+												<div className='flex flex-col items-center'>
+													<h3
+														className={`text-xl font-bold mb-2 flex items-center gap-2 ${
+															scanResult.isLegal
+																? 'text-green-400'
+																: 'text-red-500'
+														}`}
+													>
+														{scanResult.isLegal ? (
+															<>
+																<CheckCircle size={24} />
+																Legal Tower
+															</>
+														) : (
+															<>
+																<XCircle size={24} />
+																Illegal Tower
+															</>
+														)}
+													</h3>
+													<div className='text-sm text-center max-w-xs'>
+														{scanResult.isLegal
+															? 'This tower has been verified and is registered in our database.'
+															: 'This tower is not registered in our database and might be used for illegal activities.'}
+													</div>
+												</div>
+											) : capturedImage ? (
+												<div className='text-gray-400 text-sm'>
+													Click Scan to analyze this image
+												</div>
+											) : (
+												<div className='text-gray-400 text-sm'>
+													Capture an image first
+												</div>
+											)}
+										</div>
+									</div>
+								</div>
+							) : (
+								<Map />
+							)}
 						</div>
 					</div>
 
